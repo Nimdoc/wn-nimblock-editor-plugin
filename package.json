@@ -1,0 +1,25 @@
+{
+  "name": "nimblock-editor",
+  "version": "0.1.0",
+  "description": "EditorJS Package for WinterCMS",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Tom Busby",
+  "license": "EPL-2.0",
+  "dependencies": {
+    "@editorjs/code": "^2.8.0",
+    "@editorjs/delimiter": "^1.3.0",
+    "@editorjs/editorjs": "^2.28.0",
+    "@editorjs/header": "^2.7.0",
+    "@editorjs/inline-code": "^1.5.0",
+    "@editorjs/link": "^2.5.0",
+    "@editorjs/marker": "^1.3.0",
+    "@editorjs/quote": "^2.5.0",
+    "@editorjs/raw": "^2.4.0",
+    "@editorjs/table": "^2.2.2",
+    "@editorjs/underline": "^1.1.0",
+    "winter-image": "^0.1.0"
+  }
+}

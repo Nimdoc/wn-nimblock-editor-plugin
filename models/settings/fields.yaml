@@ -1,0 +1,13 @@
+# ===================================
+#  Field Definitions
+# ===================================
+
+fields:
+
+  main_section:
+    label: Nimblock Editor Settings
+    type: section
+
+  override_indikator_news_editor:
+    label: Override Indikator News Editor
+    type: switch

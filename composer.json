@@ -1,0 +1,18 @@
+{
+    "name": "nimdoc/nimblockeditor",
+    "type": "winter-plugin",
+    "description": "Block based editor plugin for Winter CMS.",
+    "homepage": "",
+    "keywords": ["winter", "wintercms", "laravel", "blocks", "block", "builder"],
+    "license": "EPL-2.0",
+    "authors": [
+        {
+            "name": "Tom Busby"
+        }
+    ],
+    "require": {
+        "ext-json": "*",
+        "composer/installers": "~1.0",
+        "codex-team/editor.js": "^2.0"
+    }
+}
