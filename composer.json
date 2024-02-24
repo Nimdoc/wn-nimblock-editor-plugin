@@ -2,7 +2,7 @@
     "name": "nimdoc/nimblockeditor",
     "type": "winter-plugin",
     "description": "Block based editor plugin for Winter CMS.",
-    "homepage": "",
+    "homepage": "https://github.com/Nimdoc/nimblock-editor",
     "keywords": ["winter", "wintercms", "laravel", "blocks", "block", "builder"],
     "license": "EPL-2.0",
     "authors": [
