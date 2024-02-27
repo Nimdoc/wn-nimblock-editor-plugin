@@ -1,5 +1,5 @@
 {
-    "name": "nimdoc/nimblockeditor",
+    "name": "nimdoc/wn-nimblockeditor-plugin",
     "type": "winter-plugin",
     "description": "Block based editor plugin for Winter CMS.",
     "homepage": "https://github.com/Nimdoc/nimblock-editor",

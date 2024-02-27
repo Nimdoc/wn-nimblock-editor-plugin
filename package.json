@@ -1,5 +1,5 @@
 {
-  "name": "nimblock-editor",
+  "name": "wn-nimblock-editor-plugin",
   "version": "0.1.0",
   "description": "EditorJS Package for WinterCMS",
   "main": "index.js",
