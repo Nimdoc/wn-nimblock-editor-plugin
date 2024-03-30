@@ -55,6 +55,9 @@ class EditorDefaultConfig
                     ],
                 ],
                 'validation' => [
+                    'withHeadings' => [
+                        'type' => 'boolean'
+                    ],
                     'content' => [
                         'type' => 'array',
                         'data' => [
@@ -181,6 +184,32 @@ class EditorDefaultConfig
                 'settings' => [
                     'class' => 'InlineCode'
                 ],
+            ],
+            'list' => [
+                'settings' => [
+                    'class' => 'List',
+                    'inlineToolbar' => true,
+                ],
+                'validation' => [
+                    'style' => [
+                        'type' => 'boolean',
+                        'canBeOnly' =>
+                            [
+                                false => 'ordered',
+                                true => 'unordered',
+                            ],
+                    ],
+                    'items' => [
+                        'type' => 'array',
+                        'data' => [
+                            '-' => [
+                                'type' => 'string',
+                                'allowedTags' => 'i,b,u',
+                            ],
+                        ],
+                    ],
+                ],
+                'view' => 'nimdoc.nimblockeditor::blocks.list'
             ],
         ];
     }

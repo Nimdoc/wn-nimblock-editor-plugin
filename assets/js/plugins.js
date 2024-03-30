@@ -8,6 +8,7 @@ import Quote from '@editorjs/quote';
 import Raw from '@editorjs/raw';
 import Table from '@editorjs/table';
 import Underline from '@editorjs/underline';
+import List from '@editorjs/list';
 import WinterImage from 'winter-image';
 
 +function ($) { "use strict";
@@ -22,6 +23,7 @@ import WinterImage from 'winter-image';
         Raw,
         Table,
         Underline,
+        List,
         WinterImage
     });
 }(window.jQuery);
