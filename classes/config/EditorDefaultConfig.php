@@ -180,6 +180,54 @@ class EditorDefaultConfig
                 ],
                 'view' => 'nimdoc.nimblockeditor::blocks.image'
             ],
+            'video' => [
+                'settings' => [
+                    'class' => 'WinterVideo',
+                    'config' => [
+                        'endpoints' => [
+                            'byFile' => config('app.url') . '/editorjs/plugins/video/uploadFile',
+                            'byUrl' => config('app.url') . '/editorjs/plugins/video/fetchUrl',
+                        ]
+                    ]
+                ],
+                'validation' => [
+                    'file' => [
+                        'type' => 'array',
+                        'data' => [
+                            'url' => [
+                                'type' => 'string',
+                            ],
+                            'thumbnails' => [
+                                'type' => 'array',
+                                'required' => false,
+                                'data' => [
+                                    '-' => [
+                                        'type' => 'string',
+                                    ]
+                                ],
+                            ]
+                        ],
+                    ],
+                    'caption' => [
+                        'type' => 'string',
+                        'required' => false,
+                    ],
+                    'alt' => [
+                        'type' => 'string',
+                        'required' => false,
+                    ],
+                    'withBorder' => [
+                        'type' => 'boolean'
+                    ],
+                    'withBackground' => [
+                        'type' => 'boolean'
+                    ],
+                    'stretched' => [
+                        'type' => 'boolean'
+                    ]
+                ],
+                'view' => 'nimdoc.nimblockeditor::blocks.video'
+            ],
             'inline-code' => [
                 'settings' => [
                     'class' => 'InlineCode'

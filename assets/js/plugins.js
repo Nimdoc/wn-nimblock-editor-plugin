@@ -10,6 +10,7 @@ import Table from '@editorjs/table';
 import Underline from '@editorjs/underline';
 import List from '@editorjs/list';
 import WinterImage from 'winter-image';
+import WinterVideo from './winter-video';
 
 +function ($) { "use strict";
     window.editorJSPluginManager.addPlugins({
@@ -24,6 +25,7 @@ import WinterImage from 'winter-image';
         Table,
         Underline,
         List,
-        WinterImage
+        WinterImage,
+        WinterVideo
     });
 }(window.jQuery);
