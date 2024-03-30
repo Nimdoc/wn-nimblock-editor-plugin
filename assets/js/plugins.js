@@ -10,7 +10,7 @@ import Table from '@editorjs/table';
 import Underline from '@editorjs/underline';
 import List from '@editorjs/list';
 import WinterImage from 'winter-image';
-import WinterVideo from './winter-video';
+import WinterVideo from 'winter-video';
 
 +function ($) { "use strict";
     window.editorJSPluginManager.addPlugins({
