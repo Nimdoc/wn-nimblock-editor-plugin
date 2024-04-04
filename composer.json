@@ -13,6 +13,11 @@
     "require": {
         "ext-json": "*",
         "composer/installers": "~1.0",
-        "codex-team/editor.js": "^2.0"
+        "codex-team/editor.js": "dev-master"
+    },
+    "config": {
+        "allow-plugins": {
+            "composer/installers": true
+        }
     }
 }
