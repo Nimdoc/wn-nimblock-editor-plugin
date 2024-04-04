@@ -51,15 +51,73 @@ class Plugin extends PluginBase
     {
         // Event::subscribe(ExtendIndikatorNews::class);
 
-        Event::listen('nimdoc.nimblockeditor.editor.config', function () {
-            return EditorDefaultConfig::getConfig();
-        });
+        Event::listen('nimdoc.nimblockeditor.editor.config', function (&$config) {
+            $config = array_merge(EditorDefaultConfig::getConfig(), $config);
+        }, 100);
         Event::listen('nimdoc.nimblockeditor.editor.tunes', function () {
             return [];
-        });
+        }, 100);
         Event::listen('nimdoc.nimblockeditor.editor.inline.toolbar', function () {
             return [];
+        }, 100);
+
+        Event::listen('backend.form.extendFields', function ($formWidget) {
+            // Check that we're extending the correct Form widget instance
+            if (
+                !($formWidget->getController() instanceof \System\Controllers\Settings)
+                || !($formWidget->model instanceof \Nimdoc\NimblockEditor\Models\Settings)
+                || $formWidget->isNested
+            ) {
+                return;
+            }
+
+            $config = [];
+            Event::fire('nimdoc.nimblockeditor.editor.config', [&$config]);
+
+            $eligibleTools = array_filter($config, fn($tool) => array_key_exists('view', $tool));
+            $toolOptions = [];
+            foreach($eligibleTools as $key => $value) {
+                $toolOptions[$key] = $key;
+            }
+
+            $formWidget->addFields([
+                'nimblock_custom_settings' => [
+                    'label'   => 'Custom Tool Settings',
+                    'span'    => 'auto',
+                    'type'    => 'datatable',
+                    'columns' => [
+                        'class_label' => [
+                            'title' => 'Label'
+                        ],
+                        'class_name' => [
+                            'title' => 'Setting'
+                        ],
+                        'tool' => [
+                            'title' => 'Apply to',
+                            'type' => 'dropdown',
+                            'options' => $toolOptions
+                        ]
+                    ]
+                ]
+            ]);
         });
+
+        // Add the customToolSettings validation to all valid blocks
+        // Event::listen('nimdoc.nimblockeditor.editor.config', function (&$config) {
+        //     foreach($config as $key => &$value) {
+        //         if(array_key_exists('view', $value)) {
+        //             $value['validation']['customToolSettings'] = [
+        //                 'type' => 'array',
+        //                 'required' => false,
+        //                 'data' => [
+        //                     '-' => [
+        //                         'type' => 'string'
+        //                     ]
+        //                 ]
+        //             ];
+        //         }
+        //     }
+        // }, 100);
     }
 
     /**

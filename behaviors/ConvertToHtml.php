@@ -71,13 +71,16 @@ class ConvertToHtml extends ExtensionBase
 
     public function renderBlocks($blocks)
     {
+        // dd($blocks);
         $html = array_map(
             function ($block) {
                 $blockType = strtolower($block['type']);
                 if (array_key_exists($blockType, $this->blocksViews)) {
                     try {
                         $viewPath = array_get($this->blocksViews, $block['type']);
-                        return View::make($viewPath, $block['data']);
+                        $data = $block['data'];
+                        $data['tunes'] = $block['tunes'];
+                        return View::make($viewPath, $data);
                     } catch (\Exception $e) {
                         trace_log($e);
                     }
@@ -91,6 +94,8 @@ class ConvertToHtml extends ExtensionBase
 
     public function getEditorBlockConfig()
     {
-        return array_merge(...Event::fire('nimdoc.nimblockeditor.editor.config'));
+        $config = [];
+        Event::fire('nimdoc.nimblockeditor.editor.config', [&$config]);
+        return $config;
     }
 }

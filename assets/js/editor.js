@@ -44,6 +44,7 @@ if("function" == typeof define && define.amd) {
             this.blockSettings = this.$el.data('blocks-settings');
             this.tunesSettings = this.$el.data('tunes-settings');
             this.inlineToolbarSettings = this.$el.data('inlineToolbar-settings');
+            this.simpleTunes = this.$el.data('simple-tunes');
 
             $.wn.foundation.controlUtils.markDisposable(element);
             Base.call(this);
@@ -58,12 +59,13 @@ if("function" == typeof define && define.amd) {
 
         initEditorJS() {
 
-            let plugins = window.editorJSPluginManager.getPlugins();
-
-            // Init all plugin classes from config
-            for (let [key, value] of Object.entries(this.blockSettings)) {
-                value.class = plugins[value.class];
+            if(this.simpleTunes) {
+                this.simpleTunes.forEach(element => {
+                    window.editorJSPluginManager.createSimpleBlockTune(element.tool, element.class_name, element.class_label);
+                });
             }
+
+            const tools = window.editorJSPluginManager.getToolsWithTunes();
 
             // Parameters for EditorJS
             let parameters = {
@@ -72,7 +74,7 @@ if("function" == typeof define && define.amd) {
                 defaultBlock: this.settings.defaultBlock ? this.settings.defaultBlock : 'paragraph',
                 autofocus: this.settings.autofocus,
                 i18n: this.settings.i18n,
-                tools: this.blockSettings,
+                tools: tools,
                 tunes: this.tunesSettings,
                 inlineToolbar: this.inlineToolbarSettings,
                 onChange: () => {
@@ -118,7 +120,7 @@ if("function" == typeof define && define.amd) {
                 this.$textarea.val(JSON.stringify(outputData));
                 this.$textarea.trigger('syncContent.wn.editorjs', [this, outputData]);
             })
-            .catch(error => console.log('editorjs - Error get content: ', error.message));
+            .catch(error => console.error('editorjs - Error get content: ', error.message));
         }
 
         isJson(string) {
