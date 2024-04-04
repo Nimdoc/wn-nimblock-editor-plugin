@@ -61,7 +61,7 @@ if("function" == typeof define && define.amd) {
 
             if(this.simpleTunes) {
                 this.simpleTunes.forEach(element => {
-                    window.editorJSPluginManager.createSimpleBlockTune(element.tool, element.class_name, element.class_label);
+                    window.editorJSPluginManager.createSimpleBlockTune(element.tool, element.tune_prop, element.tune_label);
                 });
             }
 

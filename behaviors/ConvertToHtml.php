@@ -71,7 +71,6 @@ class ConvertToHtml extends ExtensionBase
 
     public function renderBlocks($blocks)
     {
-        // dd($blocks);
         $html = array_map(
             function ($block) {
                 $blockType = strtolower($block['type']);

@@ -86,11 +86,11 @@ class Plugin extends PluginBase
                     'span'    => 'auto',
                     'type'    => 'datatable',
                     'columns' => [
-                        'class_label' => [
+                        'tune_label' => [
                             'title' => 'Label'
                         ],
-                        'class_name' => [
-                            'title' => 'Setting'
+                        'tune_prop' => [
+                            'title' => 'Property'
                         ],
                         'tool' => [
                             'title' => 'Apply to',
@@ -101,23 +101,6 @@ class Plugin extends PluginBase
                 ]
             ]);
         });
-
-        // Add the customToolSettings validation to all valid blocks
-        // Event::listen('nimdoc.nimblockeditor.editor.config', function (&$config) {
-        //     foreach($config as $key => &$value) {
-        //         if(array_key_exists('view', $value)) {
-        //             $value['validation']['customToolSettings'] = [
-        //                 'type' => 'array',
-        //                 'required' => false,
-        //                 'data' => [
-        //                     '-' => [
-        //                         'type' => 'string'
-        //                     ]
-        //                 ]
-        //             ];
-        //         }
-        //     }
-        // }, 100);
     }
 
     /**

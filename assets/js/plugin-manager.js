@@ -50,7 +50,7 @@ class EditorJSPluginManager {
         return toolsWithTunes;
     };
 
-    createSimpleBlockTune(blockName, tuneName, tuneLabel) {
+    createSimpleBlockTune(blockName, tuneProp, tuneLabel) {
         const simpleTune = class {
             constructor({api, data, config, block}) {
                 this.api = api;
@@ -71,6 +71,7 @@ class EditorJSPluginManager {
                     toggle: true,
                     onActivate: () => {
                         this.data = !this.data;
+                        this.block.dispatchChange();
                     }
                 }
             }
@@ -80,8 +81,8 @@ class EditorJSPluginManager {
             }
         }
 
-        this.addTool(tuneName, simpleTune);
-        this.addToolTune(blockName, tuneName);
+        this.addTool(tuneProp, simpleTune);
+        this.addToolTune(blockName, tuneProp);
     }
 }
 

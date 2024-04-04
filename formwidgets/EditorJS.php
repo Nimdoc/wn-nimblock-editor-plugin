@@ -127,7 +127,6 @@ class EditorJS extends FormWidgetBase
 
     protected function getSimpleTunes()
     {
-        $settings = NimblockSettings::getConfiguredSettings('nimblock_custom_settings');
-        return $settings;
+        return NimblockSettings::getConfiguredSettings('nimblock_custom_settings');
     }
 }

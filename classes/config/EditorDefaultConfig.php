@@ -35,7 +35,7 @@ class EditorDefaultConfig
                     'level' => [
                         'type' => 'int',
                         'canBeOnly' => [1, 2, 3, 4, 5]
-                    ],
+                    ]
                 ],
                 'view' => 'nimdoc.nimblockeditor::blocks.heading'
             ],
