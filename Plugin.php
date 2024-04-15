@@ -12,6 +12,15 @@
 use System\Classes\PluginBase;
 use Event;
 
+use Cms\Classes\Controller;
+use Cms\Classes\Partial;
+use Cms\Classes\Theme;
+use Winter\Storm\Filesystem\PathResolver;
+use File;
+use Nimdoc\NimblockEditor\Classes\BlocksDatasource;
+use Cms\Classes\AutoDatasource;
+use Nimdoc\NimblockEditor\Classes\Block;
+
 use Nimdoc\NimblockEditor\Classes\Event\ExtendIndikatorNews;
 use Nimdoc\NimblockEditor\Classes\Config\EditorDefaultConfig;
 
@@ -42,6 +51,13 @@ class Plugin extends PluginBase
         ];
     }
 
+    public function register()
+    {
+        return [
+            'Nimdoc\NimblockEditor\Components\Editor' => 'editor',
+        ];
+    }
+
     /**
      * Boot method, called right before the request route.
      *
@@ -52,54 +68,49 @@ class Plugin extends PluginBase
         // Event::subscribe(ExtendIndikatorNews::class);
 
         Event::listen('nimdoc.nimblockeditor.editor.config', function (&$config) {
-            $config = array_merge(EditorDefaultConfig::getConfig(), $config);
-        }, 100);
+            $config = EditorDefaultConfig::getConfig();
+        }, PHP_INT_MAX);
         Event::listen('nimdoc.nimblockeditor.editor.tunes', function () {
             return [];
-        }, 100);
+        }, PHP_INT_MAX);
         Event::listen('nimdoc.nimblockeditor.editor.inline.toolbar', function () {
             return [];
-        }, 100);
+        }, PHP_INT_MAX);
 
-        Event::listen('backend.form.extendFields', function ($formWidget) {
-            // Check that we're extending the correct Form widget instance
-            if (
-                !($formWidget->getController() instanceof \System\Controllers\Settings)
-                || !($formWidget->model instanceof \Nimdoc\NimblockEditor\Models\Settings)
-                || $formWidget->isNested
-            ) {
+        // @TODO: Find a better way to handle rendering blocks that doesn't require a "blocks" partial in the theme
+        // or require hooking into the CMS beforeRenderPartial event
+        Event::listen('cms.page.beforeRenderPartial', function (Controller $controller, string $partialName) {
+
+            $blockViews = Block::getEditorBlockViews();
+
+            if(!in_array($partialName, $blockViews)) {
                 return;
             }
 
-            $config = [];
-            Event::fire('nimdoc.nimblockeditor.editor.config', [&$config]);
+            $block = Block::loadCached(Theme::getActiveTheme(), $partialName);
 
-            $eligibleTools = array_filter($config, fn($tool) => array_key_exists('view', $tool));
-            $toolOptions = [];
-            foreach($eligibleTools as $key => $value) {
-                $toolOptions[$key] = $key;
+            return $block;
+
+            if ($block = Partial::loadCached(Theme::getActiveTheme(), $partialName)) {
+                // Execute the block lifecycle events and return the block object
+            } else {
+                throw new SystemException("The block '$partialName' can not found.");
             }
+        });
 
-            $formWidget->addFields([
-                'nimblock_custom_settings' => [
-                    'label'   => 'Custom Tool Settings',
-                    'span'    => 'auto',
-                    'type'    => 'datatable',
-                    'columns' => [
-                        'tune_label' => [
-                            'title' => 'Label'
-                        ],
-                        'tune_prop' => [
-                            'title' => 'Property'
-                        ],
-                        'tool' => [
-                            'title' => 'Apply to',
-                            'type' => 'dropdown',
-                            'options' => $toolOptions
-                        ]
-                    ]
-                ]
-            ]);
+        // Register the block manager instance
+        Event::listen('cms.theme.registerHalcyonDatasource', function (Theme $theme, $resolver) {
+            $source = $theme->getDatasource();
+            if ($source instanceof AutoDatasource) {
+                /* @var AutoDatasource $source */
+                $source->appendDatasource('blocks', new BlocksDatasource());
+                return;
+            } else {
+                $resolver->addDatasource($theme->getDirName(), new AutoDatasource([
+                    'theme' => $source,
+                    'blocks' => new BlocksDatasource(),
+                ], 'blocks-autodatasource'));
+            }
         });
     }
 
@@ -119,15 +130,26 @@ class Plugin extends PluginBase
     {
         return [
             'filters' => [
-                'editorjs' => [$this, 'convertJsonToHtml'],
-                'convertBytes' => [$this, 'convertBytes'],
+                'blocks' => [$this, 'convertJsonToHtml'],
             ],
         ];
     }
 
     public function convertJsonToHtml($field)
     {
-        return (new ConvertToHtml)->convertJsonToHtml($field);
+        // return (new ConvertToHtml)->convertJsonToHtml($field);
+
+        $controller = new Controller();
+
+        $html = '';
+
+        try {
+            $html = Block::render('blocks/heading', ['text' => 'hello']);
+        } catch (\Exception $e) {
+            echo "heck! :-)";
+        }
+
+        return $html;
     }
 
     /**

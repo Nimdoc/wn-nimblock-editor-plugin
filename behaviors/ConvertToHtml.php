@@ -77,9 +77,7 @@ class ConvertToHtml extends ExtensionBase
                 if (array_key_exists($blockType, $this->blocksViews)) {
                     try {
                         $viewPath = array_get($this->blocksViews, $block['type']);
-                        $data = $block['data'];
-                        $data['tunes'] = $block['tunes'];
-                        return View::make($viewPath, $data);
+                        return View::make($viewPath, $block['data']);
                     } catch (\Exception $e) {
                         trace_log($e);
                     }
@@ -93,8 +91,6 @@ class ConvertToHtml extends ExtensionBase
 
     public function getEditorBlockConfig()
     {
-        $config = [];
-        Event::fire('nimdoc.nimblockeditor.editor.config', [&$config]);
-        return $config;
+        return array_merge(...Event::fire('nimdoc.nimblockeditor.editor.config'));
     }
 }

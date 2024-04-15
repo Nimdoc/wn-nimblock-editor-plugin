@@ -12,7 +12,6 @@
 use Event;
 use System\Classes\PluginManager;
 use Backend\Classes\FormWidgetBase;
-use Nimdoc\NimblockEditor\Models\Settings as NimblockSettings;
 
 /**
  * EditorJS Form Widget
@@ -71,7 +70,6 @@ class EditorJS extends FormWidgetBase
         $this->vars['blockSettings'] = e(json_encode($this->blocksSettings));
         $this->vars['tunesSettings'] = e(json_encode($this->tunesSettings));
         $this->vars['inlineToolbarSettings'] = e(json_encode($this->inlineToolbarSettings));
-        $this->vars['simpleTunes'] = e(json_encode($this->getSimpleTunes()));
     }
 
     /**
@@ -81,7 +79,7 @@ class EditorJS extends FormWidgetBase
     {
         $this->prepareBlocks();
         $this->addJs('/plugins/nimdoc/nimblockeditor/assets/dist/plugin-manager.js');
-        $this->addJs('/plugins/nimdoc/nimblockeditor/assets/dist/default-tools.js');
+        $this->addJs('/plugins/nimdoc/nimblockeditor/assets/dist/plugins.js');
         $this->addJs('/plugins/nimdoc/nimblockeditor/assets/dist/editor.js');
     }
 
@@ -102,8 +100,7 @@ class EditorJS extends FormWidgetBase
 
     protected function processEditorBlocks(): void
     {
-        $editorConfig = [];
-        Event::fire('nimdoc.nimblockeditor.editor.config', [&$editorConfig]);
+        $editorConfig = array_merge(...Event::fire('nimdoc.nimblockeditor.editor.config'));
 
         $editorBlockSettings = array_filter(array_map(function ($block) {
                 return $block['settings'] ?? null;
@@ -115,18 +112,11 @@ class EditorJS extends FormWidgetBase
 
     protected function processEditorTunes(): void
     {
-        $tunes = [];
-        Event::fire('nimdoc.nimblockeditor.editor.tunes', [&$tunes]);
-        $this->tunesSettings = $tunes;
+        $this->tunesSettings = array_merge(...Event::fire('nimdoc.nimblockeditor.editor.tunes'));
     }
     
     protected function processEditorInlineToolbar(): void
     {
         $this->tunesSettings = array_merge(...Event::fire('nimdoc.nimblockeditor.editor.inline.toolbar'));
-    }
-
-    protected function getSimpleTunes()
-    {
-        return NimblockSettings::getConfiguredSettings('nimblock_custom_settings');
     }
 }

@@ -37,15 +37,4 @@ class Settings extends Model
     public $settingsCode = 'nimdoc_nimblockeditor_settings';
 
     public $settingsFields = 'fields.yaml';
-
-    /**
-     * Same as getConfigured but uses a special structure for styles.
-     * @return mixed
-     */
-    public static function getConfiguredSettings($key, $default = null)
-    {
-        $instance = static::instance();
-        $value = $instance->get($key);
-        return $value;
-    }
 }
