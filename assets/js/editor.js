@@ -61,14 +61,11 @@ if("function" == typeof define && define.amd) {
 
             if(this.simpleTunes) {
                 this.simpleTunes.forEach(element => {
-                    console.log(element);
                     window.editorJSPluginManager.createSimpleBlockTune(element.tool, element.tune_prop, element.tune_label);
                 });
             }
 
             const tools = window.editorJSPluginManager.getToolsWithTunes();
-
-            console.log(tools);
 
             // Parameters for EditorJS
             let parameters = {

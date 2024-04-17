@@ -81,8 +81,6 @@ class EditorJSPluginManager {
             }
         }
 
-        console.log(tuneProp, simpleTune, blockName, tuneLabel);
-
         this.addTool(tuneProp, simpleTune);
         this.addToolTune(blockName, tuneProp);
     }
