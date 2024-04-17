@@ -223,8 +223,11 @@ class Plugin extends PluginBase
 
                     $viewName = $this->processViewName($viewPath);
 
+                    $data = $block['data'];
+                    $data['tunes'] = $block['tunes'];
+
                     try {
-                        return Block::render($viewName, $block['data']);
+                        return Block::render($viewName, $data);
                     } catch (\Exception $e) {
                         trace_log($e);
                     }
