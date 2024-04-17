@@ -21,6 +21,8 @@ use Nimdoc\NimblockEditor\Classes\BlocksDatasource;
 use Cms\Classes\AutoDatasource;
 use Nimdoc\NimblockEditor\Classes\Block;
 
+use EditorJS\EditorJS;
+
 use Nimdoc\NimblockEditor\Classes\Event\ExtendIndikatorNews;
 use Nimdoc\NimblockEditor\Classes\Config\EditorDefaultConfig;
 
@@ -112,6 +114,47 @@ class Plugin extends PluginBase
                 ], 'blocks-autodatasource'));
             }
         });
+
+        Event::listen('backend.form.extendFields', function ($formWidget) {
+            // Check that we're extending the correct Form widget instance
+            if (
+                !($formWidget->getController() instanceof \System\Controllers\Settings)
+                || !($formWidget->model instanceof \Nimdoc\NimblockEditor\Models\Settings)
+                || $formWidget->isNested
+            ) {
+                return;
+            }
+
+            $config = [];
+            Event::fire('nimdoc.nimblockeditor.editor.config', [&$config]);
+
+            $eligibleTools = array_filter($config, fn($tool) => array_key_exists('view', $tool));
+            $toolOptions = [];
+            foreach($eligibleTools as $key => $value) {
+                $toolOptions[$key] = $key;
+            }
+
+            $formWidget->addFields([
+                'nimblock_custom_settings' => [
+                    'label'   => 'Custom Tool Settings',
+                    'span'    => 'auto',
+                    'type'    => 'datatable',
+                    'columns' => [
+                        'tune_label' => [
+                            'title' => 'Label'
+                        ],
+                        'tune_prop' => [
+                            'title' => 'Property'
+                        ],
+                        'tool' => [
+                            'title' => 'Apply to',
+                            'type' => 'dropdown',
+                            'options' => $toolOptions
+                        ]
+                    ]
+                ]
+            ]);
+        });
     }
 
     /**
@@ -137,9 +180,27 @@ class Plugin extends PluginBase
 
     public function convertJsonToHtml($field)
     {
-        // return (new ConvertToHtml)->convertJsonToHtml($field);
+        $this->editorConfig = $this->getEditorBlockConfig();
 
-        $controller = new Controller();
+        $this->validationSettings['tools'] = 
+            array_map(function ($block) {
+                return array_get($block, 'validation', []);
+            }, array_filter($this->editorConfig, function ($block) {
+                return array_key_exists('validation', $block);
+            }));
+    
+        $this->blocksViews = array_map(function ($block) {
+                return array_get($block, 'view');
+            }, $this->editorConfig);
+
+        try {
+            $editor = new EditorJS($field, json_encode($this->validationSettings));
+            $blocks = $editor->getBlocks();
+        } catch (EditorJSException $e) {
+            return $e->getMessage();
+        }
+    
+        return $this->renderBlocks($blocks);
 
         $html = '';
 
@@ -150,6 +211,47 @@ class Plugin extends PluginBase
         }
 
         return $html;
+    }
+
+    public function renderBlocks($blocks)
+    {
+        $html = array_map(
+            function ($block) {
+                $blockType = strtolower($block['type']);
+                if (array_key_exists($blockType, $this->blocksViews)) {
+                    $viewPath = array_get($this->blocksViews, $block['type']);
+
+                    $viewName = $this->processViewName($viewPath);
+
+                    try {
+                        return Block::render($viewName, $block['data']);
+                    } catch (\Exception $e) {
+                        trace_log($e);
+                    }
+                }
+            },
+            $blocks
+        );
+
+        return html_entity_decode(implode("\n", $html));
+    }
+
+    public function processViewName($viewName)
+    {
+        $viewParts = explode('::', $viewName);
+
+        $viewNameString = array_pop($viewParts);
+
+        $viewNameString = str_replace('.', '/', $viewNameString);
+
+        return $viewNameString;
+    }
+
+    public static function getEditorBlockConfig()
+    {
+        $config = [];
+        Event::fire('nimdoc.nimblockeditor.editor.config', [&$config]);
+        return $config;
     }
 
     /**
