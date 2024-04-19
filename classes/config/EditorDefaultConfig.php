@@ -132,6 +132,32 @@ class EditorDefaultConfig
                     'class' => 'Underline'
                 ],
             ],
+            'list' => [
+                'settings' => [
+                    'class' => 'List',
+                    'inlineToolbar' => true,
+                ],
+                'validation' => [
+                    'style' => [
+                        'type' => 'boolean',
+                        'canBeOnly' =>
+                            [
+                                false => 'ordered',
+                                true => 'unordered',
+                            ],
+                    ],
+                    'items' => [
+                        'type' => 'array',
+                        'data' => [
+                            '-' => [
+                                'type' => 'string',
+                                'allowedTags' => 'i,b,u,br',
+                            ],
+                        ],
+                    ],
+                ],
+                'view' => 'nimdoc.nimblockeditor::blocks.list'
+            ],
             'image' => [
                 'settings' => [
                     'class' => 'WinterImage',
@@ -232,32 +258,6 @@ class EditorDefaultConfig
                 'settings' => [
                     'class' => 'InlineCode'
                 ],
-            ],
-            'list' => [
-                'settings' => [
-                    'class' => 'List',
-                    'inlineToolbar' => true,
-                ],
-                'validation' => [
-                    'style' => [
-                        'type' => 'boolean',
-                        'canBeOnly' =>
-                            [
-                                false => 'ordered',
-                                true => 'unordered',
-                            ],
-                    ],
-                    'items' => [
-                        'type' => 'array',
-                        'data' => [
-                            '-' => [
-                                'type' => 'string',
-                                'allowedTags' => 'i,b,u',
-                            ],
-                        ],
-                    ],
-                ],
-                'view' => 'nimdoc.nimblockeditor::blocks.list'
             ],
         ];
     }
