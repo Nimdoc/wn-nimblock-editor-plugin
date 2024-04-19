@@ -201,16 +201,6 @@ class Plugin extends PluginBase
         }
     
         return $this->renderBlocks($blocks);
-
-        $html = '';
-
-        try {
-            $html = Block::render('blocks/heading', ['text' => 'hello']);
-        } catch (\Exception $e) {
-            echo "heck! :-)";
-        }
-
-        return $html;
     }
 
     public function renderBlocks($blocks)
