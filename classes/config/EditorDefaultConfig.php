@@ -232,7 +232,7 @@ class EditorDefaultConfig
                     ]
                 ],
                 'view' => 'nimdoc.nimblockeditor::blocks.image',
-                `scripts` => [
+                'scripts' => [
                     '/node_modules/winter-image/dist/winter-image.umd.js'
                 ]
             ],
