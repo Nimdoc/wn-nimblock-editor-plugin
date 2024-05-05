@@ -29,6 +29,8 @@ class EditorJS extends FormWidgetBase
 
     public $settings = [];
 
+    public $editorConfig = [];
+
     public $blocksSettings = [];
 
     public $tunesSettings = [];
@@ -42,7 +44,6 @@ class EditorJS extends FormWidgetBase
      */
     public function init()
     {
-        // Probably can delete this function...
     }
 
     /**
@@ -80,8 +81,17 @@ class EditorJS extends FormWidgetBase
     protected function loadAssets()
     {
         $this->prepareBlocks();
-        $this->addJs('/plugins/nimdoc/nimblockeditor/assets/dist/plugin-manager.js');
-        $this->addJs('/plugins/nimdoc/nimblockeditor/assets/dist/default-tools.js');
+
+        $blockScripts = [];
+
+        foreach ($this->editorConfig as $block) {
+            $blockScripts = array_merge($blockScripts, $block['scripts'] ?? []);
+        }
+
+        foreach ($blockScripts as $script) {
+            $this->addJs($script);
+        }
+
         $this->addJs('/plugins/nimdoc/nimblockeditor/assets/dist/editor.js');
     }
 
@@ -95,6 +105,10 @@ class EditorJS extends FormWidgetBase
 
     protected function prepareBlocks()
     {
+        $editorConfig = [];
+        Event::fire('nimdoc.nimblockeditor.editor.config', [&$editorConfig]);
+        $this->editorConfig = $editorConfig;
+
         $this->processEditorBlocks();
         $this->processEditorTunes();
         $this->processEditorInlineToolbar();
@@ -102,12 +116,9 @@ class EditorJS extends FormWidgetBase
 
     protected function processEditorBlocks(): void
     {
-        $editorConfig = [];
-        Event::fire('nimdoc.nimblockeditor.editor.config', [&$editorConfig]);
-
         $editorBlockSettings = array_filter(array_map(function ($block) {
                 return $block['settings'] ?? null;
-            }, $editorConfig)
+            }, $this->editorConfig)
         );
 
         $this->blocksSettings = $editorBlockSettings;

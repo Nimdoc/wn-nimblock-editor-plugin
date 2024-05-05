@@ -37,12 +37,18 @@ class EditorDefaultConfig
                         'canBeOnly' => [1, 2, 3, 4, 5]
                     ]
                 ],
-                'view' => 'nimdoc.nimblockeditor::blocks.heading'
+                'view' => 'nimdoc.nimblockeditor::blocks.heading',
+                'scripts' => [
+                    '/node_modules/@editorjs/header/dist/header.umd.js'
+                ]
             ],
             'Marker' => [
                 'settings' => [
                     'class' => 'Marker',
                     'shortcut' => 'CMD+SHIFT+M',
+                ],
+                'scripts' => [
+                    '/node_modules/@editorjs/marker/dist/marker.umd.js'
                 ],
             ],
             'table' => [
@@ -72,7 +78,10 @@ class EditorDefaultConfig
                         ]
                     ]
                 ],
-                'view' => 'nimdoc.nimblockeditor::blocks.table'
+                'view' => 'nimdoc.nimblockeditor::blocks.table',
+                'scripts' => [
+                    '/node_modules/@editorjs/table/dist/table.umd.js'
+                ]
             ],
             'quote' => [
                 'settings' => [
@@ -95,22 +104,28 @@ class EditorDefaultConfig
                         'type' => 'string',
                     ],
                 ],
-                'view' => 'nimdoc.nimblockeditor::blocks.quote'
+                'view' => 'nimdoc.nimblockeditor::blocks.quote',
+                'scripts' => [
+                    '/node_modules/@editorjs/quote/dist/quote.umd.js'
+                ]
             ],
             'code' => [
                 'settings' => [
-                    'class' => 'Code',
+                    'class' => 'CodeTool',
                 ],
                 'validation' => [
                     'code' => [
                         'type' => 'string'
                     ]
                 ],
-                'view' => 'nimdoc.nimblockeditor::blocks.code'
+                'view' => 'nimdoc.nimblockeditor::blocks.code',
+                'scripts' => [
+                    '/node_modules/@editorjs/code/dist/code.umd.js'
+                ]
             ],
             'raw' => [
                 'settings' => [
-                    'class' => 'Raw'
+                    'class' => 'RawTool'
                 ],
                 'validation' => [
                     'html' => [
@@ -118,19 +133,28 @@ class EditorDefaultConfig
                         'allowedTags' => '*',
                     ]
                 ],
-                'view' => 'nimdoc.nimblockeditor::blocks.raw'
+                'view' => 'nimdoc.nimblockeditor::blocks.raw',
+                'scripts' => [
+                    '/node_modules/@editorjs/raw/dist/raw.umd.js'
+                ]
             ],
             'delimiter' => [
                 'settings' => [
                     'class' => 'Delimiter'
                 ],
                 'validation' => [],
-                'view' => 'nimdoc.nimblockeditor::blocks.delimiter'
+                'view' => 'nimdoc.nimblockeditor::blocks.delimiter',
+                'scripts' => [
+                    '/node_modules/@editorjs/delimiter/dist/delimiter.umd.js'
+                ]
             ],
             'underline' => [
                 'settings' => [
                     'class' => 'Underline'
                 ],
+                'scripts' => [
+                    '/node_modules/@editorjs/underline/dist/bundle.js'
+                ]
             ],
             'list' => [
                 'settings' => [
@@ -156,7 +180,10 @@ class EditorDefaultConfig
                         ],
                     ],
                 ],
-                'view' => 'nimdoc.nimblockeditor::blocks.list'
+                'view' => 'nimdoc.nimblockeditor::blocks.list',
+                'scripts' => [
+                    '/node_modules/@editorjs/list/dist/list.umd.js'
+                ]
             ],
             'image' => [
                 'settings' => [
@@ -204,7 +231,10 @@ class EditorDefaultConfig
                         'type' => 'boolean'
                     ]
                 ],
-                'view' => 'nimdoc.nimblockeditor::blocks.image'
+                'view' => 'nimdoc.nimblockeditor::blocks.image',
+                `scripts` => [
+                    '/node_modules/winter-image/dist/winter-image.umd.js'
+                ]
             ],
             'video' => [
                 'settings' => [
@@ -252,12 +282,18 @@ class EditorDefaultConfig
                         'type' => 'boolean'
                     ]
                 ],
-                'view' => 'nimdoc.nimblockeditor::blocks.video'
+                'view' => 'nimdoc.nimblockeditor::blocks.video',
+                'scripts' => [
+                    '/node_modules/winter-video/dist/winter-video.umd.js'
+                ]
             ],
             'inline-code' => [
                 'settings' => [
                     'class' => 'InlineCode'
                 ],
+                'scripts' => [
+                    '/node_modules/@editorjs/inline-code/dist/inline-code.umd.js'
+                ]
             ],
         ];
     }
