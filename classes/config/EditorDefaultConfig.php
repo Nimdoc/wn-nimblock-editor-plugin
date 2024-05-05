@@ -39,7 +39,7 @@ class EditorDefaultConfig
                 ],
                 'view' => 'nimdoc.nimblockeditor::blocks.heading',
                 'scripts' => [
-                    '/node_modules/@editorjs/header/dist/header.umd.js'
+                    '/plugins/nimdoc/nimblockeditor/assets/dist/header.umd.js'
                 ]
             ],
             'Marker' => [
@@ -48,7 +48,7 @@ class EditorDefaultConfig
                     'shortcut' => 'CMD+SHIFT+M',
                 ],
                 'scripts' => [
-                    '/node_modules/@editorjs/marker/dist/marker.umd.js'
+                    '/plugins/nimdoc/nimblockeditor/assets/dist/marker.umd.js'
                 ],
             ],
             'table' => [
@@ -80,7 +80,7 @@ class EditorDefaultConfig
                 ],
                 'view' => 'nimdoc.nimblockeditor::blocks.table',
                 'scripts' => [
-                    '/node_modules/@editorjs/table/dist/table.umd.js'
+                    '/plugins/nimdoc/nimblockeditor/assets/dist/table.umd.js'
                 ]
             ],
             'quote' => [
@@ -106,7 +106,7 @@ class EditorDefaultConfig
                 ],
                 'view' => 'nimdoc.nimblockeditor::blocks.quote',
                 'scripts' => [
-                    '/node_modules/@editorjs/quote/dist/quote.umd.js'
+                    '/plugins/nimdoc/nimblockeditor/assets/dist/quote.umd.js'
                 ]
             ],
             'code' => [
@@ -120,7 +120,7 @@ class EditorDefaultConfig
                 ],
                 'view' => 'nimdoc.nimblockeditor::blocks.code',
                 'scripts' => [
-                    '/node_modules/@editorjs/code/dist/code.umd.js'
+                    '/plugins/nimdoc/nimblockeditor/assets/dist/code.umd.js'
                 ]
             ],
             'raw' => [
@@ -135,7 +135,7 @@ class EditorDefaultConfig
                 ],
                 'view' => 'nimdoc.nimblockeditor::blocks.raw',
                 'scripts' => [
-                    '/node_modules/@editorjs/raw/dist/raw.umd.js'
+                    '/plugins/nimdoc/nimblockeditor/assets/dist/raw.umd.js'
                 ]
             ],
             'delimiter' => [
@@ -145,7 +145,7 @@ class EditorDefaultConfig
                 'validation' => [],
                 'view' => 'nimdoc.nimblockeditor::blocks.delimiter',
                 'scripts' => [
-                    '/node_modules/@editorjs/delimiter/dist/delimiter.umd.js'
+                    '/plugins/nimdoc/nimblockeditor/assets/dist/delimiter.umd.js'
                 ]
             ],
             'underline' => [
@@ -153,7 +153,7 @@ class EditorDefaultConfig
                     'class' => 'Underline'
                 ],
                 'scripts' => [
-                    '/node_modules/@editorjs/underline/dist/bundle.js'
+                    '/plugins/nimdoc/nimblockeditor/assets/dist/bundle.js'
                 ]
             ],
             'list' => [
@@ -182,7 +182,7 @@ class EditorDefaultConfig
                 ],
                 'view' => 'nimdoc.nimblockeditor::blocks.list',
                 'scripts' => [
-                    '/node_modules/@editorjs/list/dist/list.umd.js'
+                    '/plugins/nimdoc/nimblockeditor/assets/dist/list.umd.js'
                 ]
             ],
             'image' => [
@@ -233,7 +233,7 @@ class EditorDefaultConfig
                 ],
                 'view' => 'nimdoc.nimblockeditor::blocks.image',
                 'scripts' => [
-                    '/node_modules/winter-image/dist/winter-image.umd.js'
+                    '/plugins/nimdoc/nimblockeditor/assets/dist/winter-image.umd.js'
                 ]
             ],
             'video' => [
@@ -284,7 +284,7 @@ class EditorDefaultConfig
                 ],
                 'view' => 'nimdoc.nimblockeditor::blocks.video',
                 'scripts' => [
-                    '/node_modules/winter-video/dist/winter-video.umd.js'
+                    '/plugins/nimdoc/nimblockeditor/assets/dist/winter-video.umd.js'
                 ]
             ],
             'inline-code' => [
@@ -292,7 +292,7 @@ class EditorDefaultConfig
                     'class' => 'InlineCode'
                 ],
                 'scripts' => [
-                    '/node_modules/@editorjs/inline-code/dist/inline-code.umd.js'
+                    '/plugins/nimdoc/nimblockeditor/assets/dist/inline-code.umd.js'
                 ]
             ],
         ];
