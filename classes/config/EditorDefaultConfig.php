@@ -221,15 +221,6 @@ class EditorDefaultConfig
                         'type' => 'string',
                         'required' => false,
                     ],
-                    'withBorder' => [
-                        'type' => 'boolean'
-                    ],
-                    'withBackground' => [
-                        'type' => 'boolean'
-                    ],
-                    'stretched' => [
-                        'type' => 'boolean'
-                    ]
                 ],
                 'view' => 'nimdoc.nimblockeditor::blocks.image',
                 'scripts' => [
@@ -272,15 +263,6 @@ class EditorDefaultConfig
                         'type' => 'string',
                         'required' => false,
                     ],
-                    'withBorder' => [
-                        'type' => 'boolean'
-                    ],
-                    'withBackground' => [
-                        'type' => 'boolean'
-                    ],
-                    'stretched' => [
-                        'type' => 'boolean'
-                    ]
                 ],
                 'view' => 'nimdoc.nimblockeditor::blocks.video',
                 'scripts' => [
