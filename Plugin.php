@@ -172,13 +172,13 @@ class Plugin extends PluginBase
     public function registerMarkupTags()
     {
         return [
-            'filters' => [
-                'blocks' => [$this, 'convertJsonToHtml'],
+            'functions' => [
+                'blocks' => [[$this, 'convertJsonToHtml'], 'options' => ['needs_environment' => true, 'needs_context' => true]],
             ],
         ];
     }
 
-    public function convertJsonToHtml($field)
+    public function convertJsonToHtml($twigEnv, $context, $field)
     {
         $this->editorConfig = $this->getEditorBlockConfig();
 
@@ -199,14 +199,14 @@ class Plugin extends PluginBase
         } catch (EditorJSException $e) {
             return $e->getMessage();
         }
-    
-        return $this->renderBlocks($blocks);
+        
+        return $this->renderBlocks($blocks, $twigEnv->getGlobals()['this']['controller']);
     }
 
-    public function renderBlocks($blocks)
+    public function renderBlocks($blocks, $controller=null)
     {
         $html = array_map(
-            function ($block) {
+            function ($block) use ($controller) {
                 $blockType = strtolower($block['type']);
                 if (array_key_exists($blockType, $this->blocksViews)) {
                     $viewPath = array_get($this->blocksViews, $block['type']);
@@ -217,7 +217,7 @@ class Plugin extends PluginBase
                     $data['tunes'] = $block['tunes'];
 
                     try {
-                        return Block::render($viewName, $data);
+                        return Block::render($viewName, $data, $controller);
                     } catch (\Exception $e) {
                         trace_log($e);
                     }
