@@ -64,6 +64,7 @@ if("function" == typeof define && define.amd) {
                 if(value.class in window) {
                     tools[key] = {
                         class: window[value.class],
+                        inlineToolbar: value.inlineToolbar,
                     }
                 } else {
                     console.error('EditorJS - Block ' + value.class + ' not found on window object.');
