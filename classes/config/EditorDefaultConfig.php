@@ -72,6 +72,7 @@ class EditorDefaultConfig
                                 'data' => [
                                     '-' => [
                                         'type' => 'string',
+                                        'allowedTags' => 'i,b,u,a[href],span[class],code[class],mark[class]'
                                     ]
                                 ]
                             ]
