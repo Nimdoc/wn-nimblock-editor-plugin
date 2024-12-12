@@ -10,7 +10,7 @@ mix.js('assets/js/editor.js', 'assets/dist/editor.js')
         '../../../node_modules/@editorjs/code/dist/code.umd.js',
         '../../../node_modules/@editorjs/raw/dist/raw.umd.js',
         '../../../node_modules/@editorjs/delimiter/dist/delimiter.umd.js',
-        '../../../node_modules/@editorjs/underline/dist/bundle.js',
+        '../../../node_modules/@editorjs/underline/dist/underline.umd.js',
         '../../../node_modules/@editorjs/list/dist/list.umd.js',
         '../../../node_modules/@editorjs/inline-code/dist/inline-code.umd.js',
         '../../../node_modules/winter-image/dist/winter-image.umd.js',
