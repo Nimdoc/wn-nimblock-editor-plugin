@@ -23,8 +23,8 @@ use Nimdoc\NimblockEditor\Classes\Block;
 
 use EditorJS\EditorJS;
 
-use Nimdoc\NimblockEditor\Classes\Event\ExtendIndikatorNews;
 use Nimdoc\NimblockEditor\Classes\Config\EditorDefaultConfig;
+use Nimdoc\NimblockEditor\Classes\ConvertToHtml;
 
 class Plugin extends PluginBase
 {
@@ -67,8 +67,6 @@ class Plugin extends PluginBase
      */
     public function boot()
     {
-        // Event::subscribe(ExtendIndikatorNews::class);
-
         Event::listen('nimdoc.nimblockeditor.editor.config', function (&$config) {
             $config = EditorDefaultConfig::getConfig();
         }, PHP_INT_MAX);
@@ -173,111 +171,15 @@ class Plugin extends PluginBase
     {
         return [
             'functions' => [
-                'blocks' => [[$this, 'convertJsonToHtml'], 'options' => ['needs_environment' => true, 'needs_context' => true]],
+                'blocks' => [$this, 'convertJsonToHtml'],
             ],
         ];
     }
 
-    public function convertJsonToHtml($twigEnv, $context, $field)
+    public function convertJsonToHtml($twigEnv, $context, $blockJson)
     {
-        $this->editorConfig = $this->getEditorBlockConfig();
-
-        $this->validationSettings['tools'] = 
-            array_map(function ($block) {
-                return array_get($block, 'validation', []);
-            }, array_filter($this->editorConfig, function ($block) {
-                return array_key_exists('validation', $block);
-            }));
-    
-        $this->blocksViews = array_map(function ($block) {
-                return array_get($block, 'view');
-            }, $this->editorConfig);
-
-        try {
-            $editor = new EditorJS($field, json_encode($this->validationSettings));
-            $blocks = $editor->getBlocks();
-        } catch (EditorJSException $e) {
-            return $e->getMessage();
-        }
-        
-        return $this->renderBlocks($blocks, $twigEnv->getGlobals()['this']['controller']);
-    }
-
-    public function renderBlocks($blocks, $controller=null)
-    {
-        $html = array_map(
-            function ($block) use ($controller) {
-                $blockType = strtolower($block['type']);
-                if (array_key_exists($blockType, $this->blocksViews)) {
-                    $viewPath = array_get($this->blocksViews, $block['type']);
-
-                    $viewName = $this->processViewName($viewPath);
-
-                    $data = $block['data'];
-                    $data['tunes'] = $block['tunes'];
-
-                    try {
-                        return Block::render($viewName, $data, $controller);
-                    } catch (\Exception $e) {
-                        trace_log($e);
-                    }
-                }
-            },
-            $blocks
-        );
-
-        return html_entity_decode(implode("\n", $html));
-    }
-
-    public function processViewName($viewName)
-    {
-        $viewParts = explode('::', $viewName);
-
-        $viewNameString = array_pop($viewParts);
-
-        $viewNameString = str_replace('.', '/', $viewNameString);
-
-        return $viewNameString;
-    }
-
-    public static function getEditorBlockConfig()
-    {
-        $config = [];
-        Event::fire('nimdoc.nimblockeditor.editor.config', [&$config]);
-        return $config;
-    }
-
-    /**
-     * Converts bytes to more sensible string
-     *
-     * @param int $bytes
-     * @return string
-     * @see \File::sizeToString($bytes);
-     */
-    public function convertBytes($bytes)
-    {
-        return \File::sizeToString($bytes);
-    }
-
-    /**
-     * Registers additional blocks for EditorJS
-     * @return array
-     */
-    public function registerEditorBlocks()
-    {
-        return EditorDefaultConfig::getConfig();
-    }
-
-    /**
-     * @throws \Illuminate\Contracts\Container\BindingResolutionException
-     */
-    private function registerErrorHandler(): void
-    {
-        \App::error(function (PluginErrorException $exception) {
-            return app(ResponseFactory::class)->make(
-                $exception->render(),
-                $exception->getCode()
-            );
-        });
+        $convertToHtml = new ConvertToHtml();
+        $html = $convertToHtml->convertJsonToHtml($blockJson);
+        return $html;
     }
 }

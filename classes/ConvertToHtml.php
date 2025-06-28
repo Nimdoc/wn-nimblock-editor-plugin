@@ -1,4 +1,4 @@
-<?php namespace Nimdoc\NimblockEditor\Behaviors;
+<?php namespace Nimdoc\NimblockEditor\Classes;
 /*********************************************************************
 * Copyright (c) 2024 Tom Busby
 *
@@ -9,42 +9,13 @@
 * SPDX-License-Identifier: EPL-2.0
 **********************************************************************/
 
-use View;
-use Log;
 use Event;
 use EditorJS\EditorJS;
-use \Cms\Classes\Theme;
-use \Cms\Classes\Partial;
-use \Cms\Classes\Controller;
-
-use Winter\Storm\Extension\ExtensionBase;
-use System\Classes\PluginManager;
-
 use EditorJS\EditorJSException;
 
-class ConvertToHtml extends ExtensionBase
+class ConvertToHtml
 {
-    /**
-     * @var array Settings for the editor block plugins
-     */
-    protected $editorConfig;
-
-    /**
-     * @var array Settings for validation
-     */
-    protected $validationSettings;
-
-    /**
-     * @var array Views for blocks
-     */
-    protected $blocksViews;
-
-    /**
-     * Convert an EditorJS JSON string to blocks
-     * @param string $jsonField
-     * @return string
-     */
-    public function convertJsonToHtml(string $jsonField): string
+    public function convertJsonToHtml($field)
     {
         $this->editorConfig = $this->getEditorBlockConfig();
 
@@ -60,24 +31,33 @@ class ConvertToHtml extends ExtensionBase
             }, $this->editorConfig);
 
         try {
-            $editor = new EditorJS($jsonField, json_encode($this->validationSettings));
+            $editor = new EditorJS($field, json_encode($this->validationSettings));
             $blocks = $editor->getBlocks();
         } catch (EditorJSException $e) {
             return $e->getMessage();
         }
-    
+
         return $this->renderBlocks($blocks);
     }
 
     public function renderBlocks($blocks)
     {
+        // Get Twig environment through the controller
+        $controller = \Cms\Classes\Controller::getController();
+
         $html = array_map(
-            function ($block) {
+            function ($block) use ($controller) {
                 $blockType = strtolower($block['type']);
                 if (array_key_exists($blockType, $this->blocksViews)) {
+                    $viewPath = array_get($this->blocksViews, $block['type']);
+
+                    $viewName = $this->processViewName($viewPath);
+
+                    $data = $block['data'];
+                    $data['tunes'] = $block['tunes'];
+
                     try {
-                        $viewPath = array_get($this->blocksViews, $block['type']);
-                        return View::make($viewPath, $block['data']);
+                        return Block::render($viewName, $data, $controller);
                     } catch (\Exception $e) {
                         trace_log($e);
                     }
@@ -89,8 +69,42 @@ class ConvertToHtml extends ExtensionBase
         return html_entity_decode(implode("\n", $html));
     }
 
-    public function getEditorBlockConfig()
+    public function processViewName($viewName)
     {
-        return array_merge(...Event::fire('nimdoc.nimblockeditor.editor.config'));
+        $viewParts = explode('::', $viewName);
+
+        $viewNameString = array_pop($viewParts);
+
+        $viewNameString = str_replace('.', '/', $viewNameString);
+
+        return $viewNameString;
+    }
+
+    public static function getEditorBlockConfig()
+    {
+        $config = [];
+        Event::fire('nimdoc.nimblockeditor.editor.config', [&$config]);
+        return $config;
+    }
+
+    /**
+     * Converts bytes to more sensible string
+     *
+     * @param int $bytes
+     * @return string
+     * @see \File::sizeToString($bytes);
+     */
+    public function convertBytes($bytes)
+    {
+        return \File::sizeToString($bytes);
+    }
+
+    /**
+     * Registers additional blocks for EditorJS
+     * @return array
+     */
+    public function registerEditorBlocks()
+    {
+        return EditorDefaultConfig::getConfig();
     }
 }
