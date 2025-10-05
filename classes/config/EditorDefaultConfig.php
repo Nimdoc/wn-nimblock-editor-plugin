@@ -97,6 +97,7 @@ class EditorDefaultConfig
                 'validation' => [
                     'text' => [
                         'type' => 'string',
+                        'allowedTags' => '*',
                     ],
                     'alignment' => [
                         'type' => 'string',
